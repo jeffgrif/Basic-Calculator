@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity() {
         resetOnInput()
 
         // Check if currentNumber has a decimal in it already, ignore new decimal if it does
-        if(input == "." && "." in currentNumber ) return
+        if(input == "." && "." in currentNumber) return
 
         // Check if currentNumber is ONLY a decimal and add a 0 in front if it is
         if(currentNumber == ".") currentNumber = "0." + input
