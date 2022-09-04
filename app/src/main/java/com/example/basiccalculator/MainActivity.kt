@@ -3,10 +3,8 @@ package com.example.basiccalculator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import org.w3c.dom.Text
 
 // Set tag for debugging purposes later on
 const val TAG = "MainActivity"
@@ -75,6 +73,7 @@ class MainActivity : AppCompatActivity() {
         resetOnInput = false
     }
 
+    // Function to handle the backspace button
     private fun backspace() {
         // Check if the equalsfunction just ran and reset display on new input
         resetOnInput()
@@ -85,9 +84,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Function to handle the equals button
     private fun equalsFunction() {
-        Log.d(TAG, currentOperation + " is current op")
+        // If the currentNumber is blank set it to 0
         if(currentNumber =="") currentNumber = "0"
+
+        // Select an operation and do the math
         when(currentOperation){
             "none" -> return
             "add" -> {
@@ -117,17 +119,27 @@ class MainActivity : AppCompatActivity() {
                 chopDecimal()
             }
         }
+
+        // Update display now with the new number
         updateDisplay()
+
+        // Set operation to none so equals button cant be hit again
         currentOperation = "none"
+
+        // Set flag to reset the currentNumber when any input key is pressed to start a new calculation
         resetOnInput = true
     }
 
+    // Check if our currentNumber has a decimal and chop it off if its .0
     private fun chopDecimal() {
+        // Check for a remainder to see if number has significant decimal
         if (currentNumber.toDouble().rem(1).equals(0.0)) {
+            // If the number ends in .0 then take the string before the decimal only
             currentNumber = currentNumber.substringBefore(".")
         }
     }
 
+    // Function used by onClickListeners to specify what the math function will be if the equals button is pressed
     private fun doSomething(something: String) {
         currentOperation = something
         if(currentNumber == "") currentNumber = "0"
@@ -135,12 +147,13 @@ class MainActivity : AppCompatActivity() {
         clearDisplay()
     }
 
+    // Function to handle all the numbers inputs and the decimal point
     private fun inputPressed(input: String) {
-        // Check if the equalsfunction just ran and reset display on new input
+        // Check if the equals function just ran and reset display on new input
         resetOnInput()
 
         // Check if currentNumber has a decimal in it already, ignore new decimal if it does
-        if("." in currentNumber && input == ".") return
+        if(input == "." && "." in currentNumber ) return
 
         // Check if currentNumber is ONLY a decimal and add a 0 in front if it is
         if(currentNumber == ".") currentNumber = "0." + input
@@ -148,12 +161,11 @@ class MainActivity : AppCompatActivity() {
         // If currentNumber is 0 just replace it with the current input.
         else if(currentNumber == "0") currentNumber = input
 
-        // Add the input to the currentNumber if all the tests passed
+        // Append input string to currentNumber
         else currentNumber += input
 
+        // Update display now that currentNumber changed
         updateDisplay()
-        Log.d(TAG, currentNumber.toString() + " current number")
-        Log.d(TAG, input.toString() + " pressed")
     }
 
     // Resets the current number to 0 and calls updateDisplay() for UI action
